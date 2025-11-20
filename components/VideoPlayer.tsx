@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import videojs from "video.js";
 import "video.js/dist/video-js.css";
 
@@ -9,35 +9,45 @@ interface VideoPlayerProps {
 }
 
 export const VideoPlayer = (props: VideoPlayerProps) => {
-  const videoNode = useRef<HTMLVideoElement>(null);
-  const player = useRef<any>(null);
+  const videoRef = useRef<HTMLDivElement>(null);
+  const playerRef = useRef<any>(null);
 
   useEffect(() => {
-    if (!player.current && videoNode.current) {
-      player.current = videojs(videoNode.current, props.options, () => {
-        props.onReady && props.onReady(player.current);
-      });
-    } else {
-      if (player.current) {
-        player.current.autoplay(props.options.autoplay);
-        player.current.src(props.options.sources);
+    if (!playerRef.current) {
+      
+      const videoElement = document.createElement("video-js");
+      videoElement.classList.add("vjs-big-play-centered");
+      
+      if (videoRef.current) {
+        videoRef.current.appendChild(videoElement);
       }
+
+      const player = (playerRef.current = videojs(videoElement, props.options, () => {
+        videojs.log("Player está pronto!");
+        props.onReady && props.onReady(player);
+      }));
+
+    } else {
+      const player = playerRef.current;
+      player.autoplay(props.options.autoplay);
+      player.src(props.options.sources);
     }
   }, [props.options]);
 
   useEffect(() => {
-    const playerCurrent = player.current;
+    const player = playerRef.current;
+
     return () => {
-      if (playerCurrent && !playerCurrent.isDisposed()) {
-        playerCurrent.dispose();
-        player.current = null;
+      if (player && !player.isDisposed()) {
+        player.dispose();
+        playerRef.current = null;
       }
     };
   }, []);
 
   return (
-    <div data-vjs-player>
-      <video ref={videoNode} className="video-js vjs-big-play-centered" />
+    <div data-vjs-player className="w-full h-full">
+      <div ref={videoRef} className="w-full h-full" />
     </div>
   );
 };

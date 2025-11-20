@@ -64,7 +64,6 @@ export default function LoginPage() {
 
   return (
     <div className="relative min-h-screen flex items-center justify-center bg-black">
-      {/* Imagem de Fundo (Background) */}
       <div className="absolute inset-0 z-0 opacity-50">
         <Image
           src="https://assets.nflxext.com/ffe/siteui/vlv3/c38a2d52-138e-48a3-ab68-36787ece46b3/eeb03fc9-99bd-4e4f-b3aa-41f6344a80fb/BR-pt-20240101-popsignuptwoweeks-perspective_alpha_website_large.jpg"
@@ -76,7 +75,6 @@ export default function LoginPage() {
         <div className="absolute inset-0 bg-black/60" /> {/* Máscara escura */}
       </div>
 
-      {/* O Cartão de Login */}
       <Card className="relative z-10 w-full max-w-md bg-black/75 border-none text-white backdrop-blur-sm p-8">
         <CardHeader>
           <CardTitle className="text-3xl font-bold mb-6">Entrar</CardTitle>
@@ -86,7 +84,6 @@ export default function LoginPage() {
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               
-              {/* Input de Email */}
               <FormField
                 control={form.control}
                 name="email"
@@ -104,7 +101,6 @@ export default function LoginPage() {
                 )}
               />
 
-              {/* Input de Senha */}
               <FormField
                 control={form.control}
                 name="password"
@@ -123,7 +119,6 @@ export default function LoginPage() {
                 )}
               />
 
-              {/* Botão de Entrar */}
               <Button 
                 type="submit" 
                 className="w-full bg-[#e50914] hover:bg-[#c11119] text-white font-bold h-12 mt-6"
@@ -132,14 +127,12 @@ export default function LoginPage() {
                 {loading ? "Carregando..." : "Entrar"}
               </Button>
 
-              {/* Mensagem de Erro do Login */}
               {error && (
                 <div className="mt-4 p-3 bg-[#e87c03] rounded text-sm font-medium">
                   {error}
                 </div>
               )}
 
-              {/* Rodapé do Card */}
               <div className="mt-8 text-gray-400 text-sm">
                 <div className="flex justify-between items-center">
                   <span>Lembre-se de mim</span>

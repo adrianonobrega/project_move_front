@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Movie } from "@/types";
 import { PlayCircle } from "lucide-react";
+import { getImageUrl } from "@/lib/api"; 
 
 interface MovieCardProps {
   movie: Movie;
@@ -12,19 +13,16 @@ export const MovieCard = ({ movie }: MovieCardProps) => {
     <Link href={`/watch/${movie.id}`}>
       <div className="group relative h-[12vw] min-h-[180px] bg-zinc-900 col-span rounded-md overflow-hidden cursor-pointer transition-all duration-300 hover:scale-110 hover:z-10 hover:shadow-xl hover:shadow-black/50">
         
-        {/* IMAGEM DA CAPA */}
         <Image
-          src={`http://localhost:3000${movie.coverUrl}`}
+          src={getImageUrl(movie.coverUrl)}
           alt={movie.title}
           fill
-          unoptimized // <--- CORREÇÃO: Permite carregar imagens do localhost
+          unoptimized={true}
           className="object-cover rounded-md transition duration-300 group-hover:opacity-80"
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
 
-        {/* INFORMAÇÕES (HOVER) */}
         <div className="absolute inset-0 flex flex-col justify-end p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-t from-black/90 via-transparent to-transparent">
-          
           <div className="flex items-center justify-center w-10 h-10 rounded-full bg-white hover:bg-gray-200 transition mb-2 text-black">
             <PlayCircle className="w-6 h-6 fill-black" />
           </div>

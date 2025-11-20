@@ -49,11 +49,10 @@ export const Navbar = () => {
     >
       <div className="px-4 md:px-16 py-4 flex flex-row items-center justify-between transition duration-500">
         
-        {/* LADO ESQUERDO */}
         <div className="flex items-center gap-8">
-          <Link href="/" className="text-red-600 text-3xl font-bold cursor-pointer">
+          {/* <Link href="/" className="text-red-600 text-3xl font-bold cursor-pointer">
             NETFLIX
-          </Link>
+          </Link> */}
           <div className="hidden md:flex flex-row gap-4 text-gray-300 text-sm">
             <Link href="/" className="hover:text-white transition font-medium">Início</Link>
             <Link href="#" className="hover:text-white transition">Séries</Link>
@@ -62,7 +61,6 @@ export const Navbar = () => {
           </div>
         </div>
 
-        {/* LADO DIREITO */}
         <div className="flex flex-row items-center gap-6 text-white">
           <Search className="w-5 h-5 cursor-pointer hover:text-gray-300 transition" />
           <Bell className="w-5 h-5 cursor-pointer hover:text-gray-300 transition" />
