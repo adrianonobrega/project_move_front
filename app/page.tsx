@@ -1,65 +1,120 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
+import axios from "axios";
+import Cookies from "js-cookie";
+import { Play, Info } from "lucide-react";
+import { Navbar } from "@/components/Navbar";
+import { MovieCard } from "@/components/MovieCard";
+import { Button } from "@/components/ui/button";
+import { Movie } from "@/types";
 
 export default function Home() {
+  const router = useRouter();
+  const [movies, setMovies] = useState<Movie[]>([]);
+  const [featuredMovie, setFeaturedMovie] = useState<Movie | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const token = Cookies.get("netflix-token");
+
+    if (!token) {
+      router.push("/login");
+      return;
+    }
+
+    async function fetchMovies() {
+      try {
+        const response = await axios.get("http://localhost:3000/videos", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const movieList = response.data;
+        setMovies(movieList);
+
+        if (movieList.length > 0) {
+          const randomIndex = Math.floor(Math.random() * movieList.length);
+          setFeaturedMovie(movieList[randomIndex]);
+        }
+      } catch (error) {
+        console.error("Erro ao buscar filmes:", error);
+
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchMovies();
+  }, [router]);
+
+  if (loading) {
+    return <div className="min-h-screen bg-black flex items-center justify-center text-white">Carregando catálogo...</div>;
+  }
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="min-h-screen bg-zinc-900 text-white">
+      <Navbar />
+
+      {/* --- DESTAQUE (BILLBOARD) --- */}
+      {featuredMovie && (
+        <div className="relative h-[56.25vw] max-h-[80vh] w-full">
+          {/* Imagem de Fundo do Destaque */}
+          <Image
+            src={`http://localhost:3000${featuredMovie.coverUrl}`}
+            alt={featuredMovie.title}
+            fill
+            className="object-cover brightness-[60%]"
+            priority
+          />
+          
+          {/* Gradiente inferior para misturar com a lista */}
+          <div className="absolute inset-0 bg-gradient-to-t from-zinc-900 via-transparent to-transparent" />
+
+          {/* Conteúdo do Destaque */}
+          <div className="absolute bottom-[20%] left-4 md:left-16 max-w-xl p-4 space-y-4">
+            <h1 className="text-4xl md:text-6xl font-bold drop-shadow-xl">
+              {featuredMovie.title}
+            </h1>
+            <p className="text-white text-sm md:text-lg drop-shadow-md line-clamp-3">
+              {featuredMovie.description || "Assista agora este sucesso exclusivo da nossa plataforma."}
+            </p>
+            
+            <div className="flex flex-row gap-3 mt-4">
+              <Link href={`/watch/${featuredMovie.id}`}>
+                <Button className="bg-white text-black hover:bg-white/80 text-lg px-8 py-6 font-bold flex items-center gap-2">
+                  <Play className="fill-black w-6 h-6" /> Assistir
+                </Button>
+              </Link>
+              
+              <Button variant="secondary" className="bg-gray-500/70 text-white hover:bg-gray-500/50 text-lg px-8 py-6 font-bold flex items-center gap-2">
+                <Info className="w-6 h-6" /> Mais Informações
+              </Button>
+            </div>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+      )}
+
+      {/* --- LISTA DE FILMES (CARROUSSEL) --- */}
+      <div className="pb-40 px-4 md:px-16 -mt-20 relative z-10">
+        <h2 className="text-white text-xl md:text-2xl font-semibold mb-4">
+          Minha Lista
+        </h2>
+        
+        {movies.length === 0 ? (
+          <p className="text-gray-500">Nenhum filme disponível no momento.</p>
+        ) : (
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            {movies.map((movie) => (
+              <MovieCard key={movie.id} movie={movie} />
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
