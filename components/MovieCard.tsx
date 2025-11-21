@@ -9,6 +9,9 @@ interface MovieCardProps {
 }
 
 export const MovieCard = ({ movie }: MovieCardProps) => {
+  
+  const matchScore = movie.rating ? Math.round(movie.rating * 20) : null;
+
   return (
     <Link href={`/watch/${movie.id}`}>
       <div className="group relative h-[12vw] min-h-[180px] bg-zinc-900 col-span rounded-md overflow-hidden cursor-pointer transition-all duration-300 hover:scale-110 hover:z-10 hover:shadow-xl hover:shadow-black/50">
@@ -32,7 +35,16 @@ export const MovieCard = ({ movie }: MovieCardProps) => {
           </h3>
           
           <div className="flex items-center gap-2 mt-1">
-            <span className="text-green-400 text-[10px] font-bold">98% Relevante</span>
+            {matchScore ? (
+              <span className="text-green-400 text-[10px] font-bold">
+                {matchScore}% Relevante
+              </span>
+            ) : (
+              <span className="text-green-400 text-[10px] font-bold">
+                Novo
+              </span>
+            )}
+
             <span className="border border-gray-500 text-[10px] text-white px-1 rounded">HD</span>
           </div>
         </div>
