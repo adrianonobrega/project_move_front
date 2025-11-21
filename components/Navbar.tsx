@@ -3,8 +3,9 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
-import { LogOut, User, Search, Bell } from "lucide-react";
+import { LogOut, User, Search, Bell, UploadCloud } from "lucide-react";
 import { useEffect, useState } from "react";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -40,6 +41,7 @@ export const Navbar = () => {
   if (!isMounted) return null;
 
   const token = Cookies.get("netflix-token");
+  const role = Cookies.get("user-role"); 
 
   return (
     <nav 
@@ -50,9 +52,9 @@ export const Navbar = () => {
       <div className="px-4 md:px-16 py-4 flex flex-row items-center justify-between transition duration-500">
         
         <div className="flex items-center gap-8">
-          {/* <Link href="/" className="text-red-600 text-3xl font-bold cursor-pointer">
+          <Link href="/" className="text-red-600 text-3xl font-bold cursor-pointer">
             NETFLIX
-          </Link> */}
+          </Link>
           <div className="hidden md:flex flex-row gap-4 text-gray-300 text-sm">
             <Link href="/" className="hover:text-white transition font-medium">Início</Link>
             <Link href="#" className="hover:text-white transition">Séries</Link>
@@ -77,6 +79,18 @@ export const Navbar = () => {
               <DropdownMenuContent align="end" className="bg-black border-gray-800 text-white w-56 mt-2">
                 <DropdownMenuLabel>Minha Conta</DropdownMenuLabel>
                 <DropdownMenuSeparator className="bg-gray-700" />
+                
+                {role === "ADMIN" && (
+                  <>
+                    <Link href="/admin/upload">
+                      <DropdownMenuItem className="cursor-pointer hover:bg-gray-800 focus:bg-gray-800 focus:text-white">
+                        <UploadCloud className="mr-2 h-4 w-4 text-red-500" /> Adicionar Filme
+                      </DropdownMenuItem>
+                    </Link>
+                    <DropdownMenuSeparator className="bg-gray-700" />
+                  </>
+                )}
+
                 <DropdownMenuItem className="cursor-pointer hover:bg-gray-800">
                   <User className="mr-2 h-4 w-4" /> Gerenciar Perfis
                 </DropdownMenuItem>
