@@ -1,4 +1,5 @@
 "use client";
+
 import { useEffect, useState, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
@@ -14,6 +15,7 @@ export default function WatchPage() {
   const params = useParams();
   const { id } = params;
   const router = useRouter();
+  
   const [movie, setMovie] = useState<Movie | null>(null);
   const playerRef = useRef(null);
 
@@ -31,11 +33,22 @@ export default function WatchPage() {
           router.push("/");
         }
       } catch (error) {
-        console.error("Erro", error);
+        console.error(error);
       }
     }
     if (id) fetchMovie();
   }, [id, router]);
+
+  useEffect(() => {
+    if (movie && window.location.hash === "#info") {
+      setTimeout(() => {
+        const element = document.getElementById("info");
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
+        }
+      }, 500);
+    }
+  }, [movie]); 
 
   if (!movie) return <div className="min-h-screen bg-black flex items-center justify-center text-white">Carregando...</div>;
 
@@ -69,7 +82,7 @@ export default function WatchPage() {
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto w-full px-6 py-10">
+      <div id="info" className="max-w-6xl mx-auto w-full px-6 py-10">
         <div className="flex flex-col md:flex-row gap-8 items-start">
           <div className="flex-1 space-y-4">
             <h1 className="text-4xl md:text-5xl font-bold text-white">{movie.title}</h1>

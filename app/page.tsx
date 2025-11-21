@@ -15,10 +15,8 @@ import { api, getImageUrl } from "@/lib/api";
 
 export default function Home() {
   const router = useRouter();
-  
   const [featuredMovies, setFeaturedMovies] = useState<Movie[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  
   const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -45,7 +43,7 @@ export default function Home() {
         }
 
       } catch (error) {
-        console.error("Erro ao buscar filmes:", error);
+        console.error(error);
       } finally {
         setLoading(false);
       }
@@ -121,14 +119,16 @@ export default function Home() {
             
             <div className="flex flex-row gap-3 mt-4">
               <Link href={`/watch/${currentMovie.id}`}>
-                <Button className="bg-white text-black hover:bg-white/80 text-lg px-8 py-6 font-bold flex items-center gap-2">
+                <Button className="bg-white text-black hover:bg-white/80 text-lg px-8 py-6 font-bold flex items-center gap-2 transition">
                   <Play className="fill-black w-6 h-6" /> Assistir
                 </Button>
               </Link>
               
-              <Button variant="secondary" className="bg-gray-500/70 text-white hover:bg-gray-500/50 text-lg px-8 py-6 font-bold flex items-center gap-2">
-                <Info className="w-6 h-6" /> Mais Informações
-              </Button>
+              <Link href={`/watch/${currentMovie.id}#info`}>
+                <Button variant="secondary" className="bg-gray-500/70 text-white hover:bg-gray-500/50 text-lg px-8 py-6 font-bold flex items-center gap-2 transition">
+                  <Info className="w-6 h-6" /> Mais Informações
+                </Button>
+              </Link>
             </div>
           </div>
 
