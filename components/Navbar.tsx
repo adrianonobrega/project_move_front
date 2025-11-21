@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Cookies from "js-cookie";
 import { LogOut, User, Search, Bell, UploadCloud, X } from "lucide-react";
 import { useEffect, useState, useRef } from "react";
-
+import { Settings } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -150,6 +150,13 @@ export const Navbar = () => {
                     <Link href="/admin/upload">
                       <DropdownMenuItem className="cursor-pointer hover:bg-gray-800">
                         <UploadCloud className="mr-2 h-4 w-4 text-red-500" /> Adicionar Filme
+                      </DropdownMenuItem>
+                    </Link>
+                    <DropdownMenuSeparator className="bg-gray-700" />
+
+                    <Link href="/admin/dashboard">
+                      <DropdownMenuItem className="cursor-pointer hover:bg-gray-800 focus:bg-gray-800 focus:text-white">
+                        <Settings className="mr-2 h-4 w-4 text-red-500" /> Painel Admin
                       </DropdownMenuItem>
                     </Link>
                     <DropdownMenuSeparator className="bg-gray-700" />
